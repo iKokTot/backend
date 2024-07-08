@@ -4,10 +4,14 @@ import { AppService } from './app.service';
 import { UserModule } from '../user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '../user/entity/user.entiy';
 import configurations from 'src/configurations';
+import { AuthModule } from '../auth/auth.module';
+
+import { TokenModule } from '../token/token.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({
+   imports: [ConfigModule.forRoot({
     isGlobal: true,
     load: [configurations]
   }), 
@@ -21,11 +25,15 @@ import configurations from 'src/configurations';
       username: configService.get<string>('db_user'),
       password: configService.get<string>('db_password'),
       database: configService.get<string>('db_name'),
-      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-      synchronize: true,
+      entities: [User],
+      migrations: [__dirname + '/migration/**/*{.ts,.js}'],
+      synchronize: false,
     }),
   }),
-  UserModule],
+  UserModule,
+  AuthModule,
+  TokenModule
+],
   controllers: [AppController],
   providers: [AppService],
 })
