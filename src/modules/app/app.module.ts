@@ -8,8 +8,10 @@ import { User } from '../user/entity/user.entiy';
 import configurations from 'src/configurations';
 import { AuthModule } from '../auth/auth.module';
 
+import { TokenModule } from '../token/token.module';
+
 @Module({
-  imports: [ConfigModule.forRoot({
+   imports: [ConfigModule.forRoot({
     isGlobal: true,
     load: [configurations]
   }), 
@@ -29,7 +31,8 @@ import { AuthModule } from '../auth/auth.module';
     }),
   }),
   UserModule,
-  AuthModule
+  AuthModule,
+  TokenModule
 ],
   controllers: [AppController],
   providers: [AppService],

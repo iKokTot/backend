@@ -4,7 +4,7 @@ import { User } from './entity/user.entiy';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateUserDTO } from './dto';
+import { CreateUserDTO, UpdateUserDTO } from './dto';
 import { AppError } from 'src/common/constants/errors';
 
 @Injectable()
@@ -33,5 +33,29 @@ export class UserService {
             password: dto.password
         });
         return this.userRepository.save(user);
+    }
+    async publicUser (email: string){
+        return this.userRepository.findOne({
+            select: {
+                id: true,
+                firstName: true,
+                userName: true,
+                email: true,
+                list: true
+            },
+            where:{email},
+            
+        })
+        
+    }
+
+    async updateUser(email: string, dto: UpdateUserDTO):Promise<UpdateUserDTO> {
+        await this.userRepository.update({ email: email }, dto);
+        return dto
+    }
+
+    async deleteUser(email: string){
+        await this.userRepository.delete({email:email})
+        return true
     }
 }
