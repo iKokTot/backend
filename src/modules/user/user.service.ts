@@ -40,10 +40,12 @@ export class UserService {
                 id: true,
                 firstName: true,
                 userName: true,
-                email: true,
-                list: true
+                email: true,  
+                cryptocurrencies: true 
             },
             where:{email},
+            relations: ['cryptocurrencies'],
+            
             
         })
         
@@ -54,7 +56,7 @@ export class UserService {
         return dto
     }
 
-    async deleteUser(email: string){
+    async deleteUser(email: string): Promise<Boolean>{
         await this.userRepository.delete({email:email})
         return true
     }
