@@ -6,7 +6,6 @@ export class UserLoginDTO{
     @IsString()
     email: string
 
-
     @ApiProperty()
     @IsString()
     password : string
