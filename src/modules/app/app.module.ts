@@ -9,6 +9,8 @@ import configurations from 'src/configurations';
 import { AuthModule } from '../auth/auth.module';
 
 import { TokenModule } from '../token/token.module';
+import { WathlistModule } from '../wathlist/wathlist.module';
+import { Cryptocurrency } from '../wathlist/entity/wathlist.entity';
 
 @Module({
    imports: [ConfigModule.forRoot({
@@ -25,14 +27,15 @@ import { TokenModule } from '../token/token.module';
       username: configService.get<string>('db_user'),
       password: configService.get<string>('db_password'),
       database: configService.get<string>('db_name'),
-      entities: [User],
-      migrations: [__dirname + '/migration/**/*{.ts,.js}'],
+      entities: [User, Cryptocurrency],
+      migrations: [__dirname + '/src/migration/*{.ts,.js}'],
       synchronize: false,
     }),
   }),
   UserModule,
   AuthModule,
-  TokenModule
+  TokenModule,
+  WathlistModule
 ],
   controllers: [AppController],
   providers: [AppService],

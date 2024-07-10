@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import 'dotenv/config';
 import { User } from './src/modules/user/entity/user.entiy'; 
+import { Cryptocurrency } from 'src/modules/wathlist/entity/wathlist.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -9,7 +10,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [User],
-  migrations: [__dirname + '/src/migration/**/*{.ts,.js}'],
+  entities: [User, Cryptocurrency],
+  migrations: [__dirname + '/src/migration/*{.ts,.js}'],
   synchronize: false,
 });

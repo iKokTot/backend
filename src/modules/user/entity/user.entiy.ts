@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Cryptocurrency } from 'src/modules/wathlist/entity/wathlist.entity';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable } from 'typeorm';
 
 @Entity()
 export class User {
@@ -17,6 +18,7 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ nullable: true })
-    list?: string;
+    @ManyToMany(() => Cryptocurrency, cryptocurrency => cryptocurrency.users, {onDelete:"CASCADE", onUpdate:'CASCADE'})
+    @JoinTable()
+    cryptocurrencies: Cryptocurrency[];
 }
