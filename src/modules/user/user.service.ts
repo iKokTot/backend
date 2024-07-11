@@ -14,27 +14,39 @@ export class UserService {
         private readonly userRepository: Repository<User>){
 
     }
-    async findUserByEmail(email:string){
+    async findUserByEmail(email:string): Promise<User>{
+        try{
         return this.userRepository.findOne( {where:{ email: email }});
+        }catch(e){
+            throw new Error(e)
+        }
     }
     getUsers() {
         return users;
     }
-    async hashPassword(password){
-        return bcrypt.hash(password, 10)
+    async hashPassword(password: string): Promise<string>{
+        try{
+            return bcrypt.hash(password, 10)
+        }catch(e){
+            throw new Error(e)
+        }
     }
     async createUser(dto: CreateUserDTO): Promise<User> {
-        
-        dto.password = await this.hashPassword(dto.password);
-        const user = this.userRepository.create({
-            firstName: dto.firstName,
-            userName: dto.userName,
-            email: dto.email,
-            password: dto.password
-        });
+        try{
+            dto.password = await this.hashPassword(dto.password);
+            const user = this.userRepository.create({
+                firstName: dto.firstName,
+                userName: dto.userName,
+                email: dto.email,
+                password: dto.password
+            });
         return this.userRepository.save(user);
+        }catch(e){
+            throw new Error(e)
+        }
     }
-    async publicUser (email: string){
+    async publicUser (email: string): Promise<User>{
+        try{
         return this.userRepository.findOne({
             select: {
                 id: true,
@@ -45,19 +57,28 @@ export class UserService {
             },
             where:{email},
             relations: ['cryptocurrencies'],
-            
-            
         })
+        }catch(e){
+            throw new Error(e)
+        }
         
     }
 
     async updateUser(email: string, dto: UpdateUserDTO):Promise<UpdateUserDTO> {
+        try{
         await this.userRepository.update({ email: email }, dto);
         return dto
+        }catch(e){
+            throw new Error(e)
+        }
     }
 
     async deleteUser(email: string): Promise<Boolean>{
+        try{
         await this.userRepository.delete({email:email})
         return true
+        }catch(e){
+            throw new Error(e)
+        }
     }
 }
