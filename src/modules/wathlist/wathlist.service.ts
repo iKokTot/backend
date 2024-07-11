@@ -18,6 +18,7 @@ export class WathlistService {
         private readonly wathlistRepository: Repository<Cryptocurrency>){}
 
     async createAsset(user, dto):Promise<CreateAssetResponse>{
+        try{
         const wathlist = {
             users: user.id,
             name: dto.name,
@@ -25,6 +26,9 @@ export class WathlistService {
         }
         await this.wathlistRepository.create(wathlist)
         return this.wathlistRepository.save(wathlist)
+        }catch(e){
+            throw new Error(e)
+        }
     }
     async getAllAsset(){
             return this.wathlistRepository.find()
@@ -33,6 +37,7 @@ export class WathlistService {
         return   
     }
     async addAssetForUser( id: number, user:UpdateUserDTO){
+        try {
         const Asset = await this.wathlistRepository.findOne({where: {id:id}})
         const User = await this.userRepository.findOne({
             where:{email:user.email},
@@ -43,9 +48,14 @@ export class WathlistService {
         }
         User.cryptocurrencies.push(Asset)
         return this.userRepository.save(User)
+        }catch(e){
+            throw new Error(e)
+        }
+
     }
 
     async removeAssetFromUser(email: string, assetId: number): Promise<RemoveAssetFromUserResponse> {
+        try{
         const user = await this.userRepository.findOne({ 
             select: {
                 id: true,
@@ -72,5 +82,9 @@ export class WathlistService {
         user.cryptocurrencies = user.cryptocurrencies.filter(c => c.id != assetId);
         console.log(user.cryptocurrencies)
         return this.userRepository.save(user);
+        }
+        catch(e){
+            throw new Error(e)
+        }
     }
 }
